@@ -1,0 +1,12 @@
+<h2>Index for folder "{folder.name}"</h2>
+
+<ul>
+    <f:for each="{folder.files}" as="file">
+        <li>
+            Name: {file.name}<br>
+            <f:link.action action="show" controller="File" arguments="{file: file.combinedIdentifier}">Show</f:link.action>
+        </li>
+    </f:for>
+</ul>
+
+TODO: Upload Form
