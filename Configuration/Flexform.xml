@@ -1,0 +1,30 @@
+<T3DataStructure>
+    <meta>
+        <langDisable>1</langDisable>
+    </meta>
+    <sheets>
+        <sDEF>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>LLL:EXT:wv_fal_frontend/Resources/Private/Language/locallang.xlf:flexform.sheetTitle.settings</sheetTitle>
+                </TCEforms>
+                <type>array</type>
+                <el>
+                    <settings.folderToUse>
+                        <TCEforms>
+                            <label>LLL:EXT:wv_fal_frontend/Resources/Private/Language/locallang.xlf:flexform.settings.folderToUse</label>
+                            <config>
+                                <type>group</type>
+                                <internal_type>folder</internal_type>
+                                <size>1</size>
+                                <maxitems>1</maxitems>
+                                <minitems>1</minitems>
+                            </config>
+                        </TCEforms>
+                    </settings.folderToUse>
+                </el>
+            </ROOT>
+        </sDEF>
+    </sheets>
+</T3DataStructure>
+
