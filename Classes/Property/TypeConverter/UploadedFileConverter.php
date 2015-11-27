@@ -38,7 +38,7 @@ class UploadedFileConverter extends AbstractTypeConverter
     /**
      * How to handle a upload when the name of the uploaded file conflicts.
      */
-    const CONF_UPLOAD_CONFLICT_MODE = 2;
+    const CONF_UPLOAD_CONFLICT = 2;
 
     /**
      * Whether to replace an already present resource.
@@ -90,15 +90,19 @@ class UploadedFileConverter extends AbstractTypeConverter
     /**
      * Process the convert process.
      *
-     * @param array $source
+     * @param mixed $source
      * @param string $targetType
      * @param array $convertedChildProperties
      * @param PropertyMappingConfigurationInterface $configuration
      *
      * @return \TYPO3\CMS\Extbase\Domain\Model\AbstractFileFolder
      */
-    public function convertFrom($source, $targetType, array $convertedChildProperties = array(), PropertyMappingConfigurationInterface $configuration = null)
-    {
+    public function convertFrom(
+        $source,
+        $targetType,
+        array $convertedChildProperties = array(),
+        PropertyMappingConfigurationInterface $configuration = null
+    ) {
         try {
             $resource = $this->checkForError($source)
                 ->checkFileExtension($source, $configuration)
@@ -183,7 +187,7 @@ class UploadedFileConverter extends AbstractTypeConverter
     protected function importUploadedResource(array $uploadInfo, PropertyMappingConfigurationInterface $configuration)
     {
         $uploadFolderId = $configuration->getConfigurationValue(__class__, static::CONF_UPLOAD_FOLDER) ?: $this->uploadFolder;
-        $conflictMode = $configuration->getConfigurationValue(__class__, static::CONF_UPLOAD_CONFLICT_MODE) ?: $this->conflictMode;
+        $conflictMode = $configuration->getConfigurationValue(__class__, static::CONF_UPLOAD_CONFLICT) ?: $this->conflictMode;
 
         $uploadFolder = $this->resourceFactory->retrieveFileOrFolderObject($uploadFolderId);
 
