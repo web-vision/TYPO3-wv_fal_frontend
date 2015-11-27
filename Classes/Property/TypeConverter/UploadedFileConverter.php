@@ -48,6 +48,11 @@ class UploadedFileConverter extends AbstractTypeConverter
     const CONF_ALLOWED_FILE_EXTENSIONS = 4;
 
     /**
+     * Array key (field) that contains error for uploaded files.
+     */
+    const PHP_FILE_UPLOAD_ERROR_FIELD = 'error';
+
+    /**
      * @var string
      */
     protected $uploadFolder = '1:/user_upload/';
@@ -94,25 +99,44 @@ class UploadedFileConverter extends AbstractTypeConverter
      */
     public function convertFrom($source, $targetType, array $convertedChildProperties = array(), PropertyMappingConfigurationInterface $configuration = null)
     {
-        if ($source['error'] !== \UPLOAD_ERR_OK) {
-            switch ($source['error']) {
-                case \UPLOAD_ERR_INI_SIZE:
-                case \UPLOAD_ERR_FORM_SIZE:
-                case \UPLOAD_ERR_PARTIAL:
-                    return new Error(Files::getUploadErrorMessage($source['error']), 1264440823);
-                default:
-                    return new Error('An error occurred while uploading. Please try again or contact the administrator if the problem remains', 1340193849);
-            }
-        }
-
         try {
-            $this->checkFileExtension($source, $configuration);
-            $resource = $this->importUploadedResource($source, $configuration);
+            $resource = $this->checkForError($source)
+                ->checkFileExtension($source, $configuration)
+                ->importUploadedResource($source, $configuration);
         } catch (\Exception $e) {
             return new Error($e->getMessage(), $e->getCode());
         }
 
         return $resource;
+    }
+
+    /**
+     * Check for upload error.
+     *
+     * If error occured during upload, throw exception.
+     *
+     * @param array $uploadInfo
+     *
+     * @return UploadedFileConverter
+     */
+    protected function checkForError(array $uploadInfo)
+    {
+        $nativeErrors = [\UPLOAD_ERR_INI_SIZE, \UPLOAD_ERR_FORM_SIZE, \UPLOAD_ERR_PARTIAL];
+        if ($uploadInfo[static::PHP_FILE_UPLOAD_ERROR_FIELD] !== \UPLOAD_ERR_OK) {
+            if(in_array($uploadInfo[static::PHP_FILE_UPLOAD_ERROR_FIELD], $nativeErrors)) {
+                throw new TypeConverterException(
+                    Files::getUploadErrorMessage($uploadInfo[static::PHP_FILE_UPLOAD_ERROR_FIELD]),
+                    1264440823
+                );
+            }
+
+            throw new TypeConverterException(
+                'An error occurred while uploading. Please try again or contact the administrator if the problem remains',
+                1340193849
+            );
+        }
+
+        return $this;
     }
 
     /**
@@ -133,7 +157,7 @@ class UploadedFileConverter extends AbstractTypeConverter
 
         $allowedExtensions = $configuration->getConfigurationValue(
             'WebVision\\WvFalFrontend\\Property\\TypeConverter\\UploadedFileReferenceConverter',
-            self::CONF_ALLOWED_FILE_EXTENSIONS
+            static::CONF_ALLOWED_FILE_EXTENSIONS
         );
 
         if ($allowedExtensions !== null) {
@@ -158,8 +182,8 @@ class UploadedFileConverter extends AbstractTypeConverter
      */
     protected function importUploadedResource(array $uploadInfo, PropertyMappingConfigurationInterface $configuration)
     {
-        $uploadFolderId = $configuration->getConfigurationValue(__class__, self::CONF_UPLOAD_FOLDER) ?: $this->uploadFolder;
-        $conflictMode = $configuration->getConfigurationValue(__class__, self::CONF_UPLOAD_CONFLICT_MODE) ?: $this->conflictMode;
+        $uploadFolderId = $configuration->getConfigurationValue(__class__, static::CONF_UPLOAD_FOLDER) ?: $this->uploadFolder;
+        $conflictMode = $configuration->getConfigurationValue(__class__, static::CONF_UPLOAD_CONFLICT_MODE) ?: $this->conflictMode;
 
         $uploadFolder = $this->resourceFactory->retrieveFileOrFolderObject($uploadFolderId);
 

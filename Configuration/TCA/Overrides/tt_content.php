@@ -12,16 +12,20 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
+call_user_func(function () {
+    $extensionKey = 'wv_fal_frontend';
+    $pluginKey = 'wvfalfrontend_falfrontend';
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-    'WebVision.wv_fal_frontend',
-    'FalFrontend',
-    'FAL Frontend'
-);
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+        'WebVision.' . $extensionKey,
+        'FalFrontend',
+        'FAL Frontend'
+    );
 
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['wvfalfrontend_falfrontend'] = 'recursive,select_key,pages';
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['wvfalfrontend_falfrontend'] = 'pi_flexform';
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
-    'wvfalfrontend_falfrontend',
-    'FILE:EXT:wv_fal_frontend/Configuration/Flexform.xml'
-);
+    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginKey] = 'recursive,select_key,pages';
+    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginKey] = 'pi_flexform';
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+        $pluginKey,
+        'FILE:EXT:' . $extensionKey . '/Configuration/Flexform.xml'
+    );
+});

@@ -1,6 +1,13 @@
 <h2>File Upload</h2>
 
 <f:form action="upload" controller="File" name="fileUpload" enctype="multipart/form-data">
+    <f:form.validationResults for="file">
+        <f:if condition="{validationResults.errors}">
+            <f:for each="{validationResults.errors}" as="error">
+                {error.message}
+            </f:for>
+        </f:if>
+    </f:form.validationResults>
     <f:form.upload name="file" />
     <f:form.submit value="Upload!" />
 </f:form>

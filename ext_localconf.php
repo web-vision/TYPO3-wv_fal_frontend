@@ -19,11 +19,6 @@
     [
         'Folder' => 'index',
         'File' => 'show,upload',
-    ],
-    // TODO: Configure non cacheable actions after development
-    [
-        'Folder' => 'index',
-        'File' => 'show,upload',
     ]
 );
 
