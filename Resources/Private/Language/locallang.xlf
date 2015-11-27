@@ -9,6 +9,13 @@
              <trans-unit id="flexform.settings.folderToUse" xml:space="preserve">
                 <source>Folder to Use</source>
              </trans-unit>
+
+             <trans-unit id="flashMessage.fileUploaded.title" xml:space="preserve">
+                <source>File was uploaded</source>
+             </trans-unit>
+             <trans-unit id="flashMessage.fileUploaded.body" xml:space="preserve">
+                <source>The file "%s" was sucessfully uploaded.</source>
+             </trans-unit>
          </body>
      </file>
 </xliff>

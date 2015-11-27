@@ -15,6 +15,9 @@ namespace WebVision\WvFalFrontend\Controller;
  */
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Resource\File;
+use WebVision\WvFalFrontend\Property\TypeConverter\UploadedFileConverter;
 
 /**
  * Handle all file related tasks like allow upload of files.
@@ -40,17 +43,40 @@ class FileController extends ActionController
     }
 
     /**
+     * Configure upload path.
+     *
+     * @return FileController
+     */
+    protected function initializeUploadAction()
+    {
+        // Configure allowed file extensions (from install tool settings only images).
+        // Configure folder for uploads from plugin settings.
+        $this->arguments['file']
+            ->getPropertyMappingConfiguration()
+            ->setTypeConverterOptions(
+                'WebVision\WvFalFrontend\Property\TypeConverter\UploadedFileConverter',
+                array(
+                    UploadedFileConverter::CONF_ALLOWED_FILE_EXTENSIONS => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
+                    UploadedFileConverter::CONF_UPLOAD_FOLDER => $this->settings['folderToUse'],
+                )
+            );
+
+        return $this;
+    }
+
+    /**
      * Upload the given file into FAL.
      *
-     * @TODO: Use initialize action to prepare file upload
-     *        Upload file with FAL.
-     *        Use configuration to determine target folder.
-     *        Think about way to provide upload form.
+     * @param TYPO3\CMS\Core\Resource\File $file
      *
      * @return void
      */
-    public function uploadAction()
+    public function uploadAction(File $file)
     {
-        throw new \Exception('Not implemented yet!');
+        $this->addFlashMessage(
+            LocalizationUtility::translate('flashMessage.fileUploaded.body', $this->extensionName, array($file->getName())),
+            LocalizationUtility::translate('flashMessage.fileUploaded.title', $this->extensionName, array($file->getName()))
+        );
+        $this->redirect('show', null, null, array('file' => $file->getCombinedIdentifier()));
     }
 }

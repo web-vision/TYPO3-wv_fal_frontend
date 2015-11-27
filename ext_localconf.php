@@ -26,3 +26,7 @@
         'File' => 'show,upload',
     ]
 );
+
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerTypeConverter(
+    'WebVision\WvFalFrontend\Property\TypeConverter\UploadedFileConverter'
+);
