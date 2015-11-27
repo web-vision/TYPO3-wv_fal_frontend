@@ -1,0 +1,18 @@
+{
+    "name": "web-vision/wv_fal_frontend",
+    "description": "Frontend features for FAL.",
+    "type": "typo3-cms-extension",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "Daniel Siepmann",
+            "email": "d.siepmann@web-vision.de"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "WebVision\\WvFalFrontend\\": "Classes"
+        }
+    }
+}
