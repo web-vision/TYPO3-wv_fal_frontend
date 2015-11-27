@@ -7,7 +7,7 @@
                 <source>Settings</source>
             </trans-unit>
             <trans-unit id="flexform.settings.folderToUse" xml:space="preserve">
-                <source>Folder to Use</source>
+                <source>Folder to use</source>
             </trans-unit>
 
             <trans-unit id="flashMessage.fileUploaded.title" xml:space="preserve">

@@ -55,10 +55,10 @@ class FileController extends ActionController
             ->getPropertyMappingConfiguration()
             ->setTypeConverterOptions(
                 'WebVision\WvFalFrontend\Property\TypeConverter\UploadedFileConverter',
-                array(
+                [
                     UploadedFileConverter::CONF_ALLOWED_FILE_EXTENSIONS => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
                     UploadedFileConverter::CONF_UPLOAD_FOLDER => $this->settings['folderToUse'],
-                )
+                ]
             );
 
         return $this;
@@ -74,9 +74,9 @@ class FileController extends ActionController
     public function uploadAction(File $file)
     {
         $this->addFlashMessage(
-            LocalizationUtility::translate('flashMessage.fileUploaded.body', $this->extensionName, array($file->getName())),
-            LocalizationUtility::translate('flashMessage.fileUploaded.title', $this->extensionName, array($file->getName()))
+            LocalizationUtility::translate('flashMessage.fileUploaded.body', $this->extensionName, [$file->getName()]),
+            LocalizationUtility::translate('flashMessage.fileUploaded.title', $this->extensionName, [$file->getName()])
         );
-        $this->redirect('show', null, null, array('file' => $file->getCombinedIdentifier()));
+        $this->redirect('show', null, null, ['file' => $file->getCombinedIdentifier()]);
     }
 }
